@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_string.c                                 :+:      :+:    :+:   */
+/*   ft_put_adr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: satushi <satushi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 07:44:34 by satushi           #+#    #+#             */
-/*   Updated: 2022/10/22 15:28:27 by satushi          ###   ########.fr       */
+/*   Updated: 2022/10/22 16:34:45 by satushi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ static int counter_digit(const char *base_num)
 	return digit;
 }
 
-static int num_base(int subject_num, int base_num)
+static int num_base(long long subject_num, long base_num)
 {
 	int malloc_size;
 
-	malloc_size = 0;
+	malloc_size = 1;
 	while(subject_num != 0)
 	{
 		malloc_size = malloc_size + 1;
@@ -39,7 +39,7 @@ static int num_base(int subject_num, int base_num)
 	return malloc_size;
 }
 
-static char *inputnbr(int subject, int base, int size)
+static char *inputnbr(long long subject, int base, int size, const char *base_chr)
 {
 	char *char_malloc;
 
@@ -47,18 +47,19 @@ static char *inputnbr(int subject, int base, int size)
 	if(char_malloc == NULL)
 		return (NULL);
 	*(char_malloc + size) = '\0';
+    size = size - 1;
 	while(size-- != 0)
 	{
-		*(char_malloc + size) = subject % base + '0';
+		*(char_malloc + size) = base_chr[subject % base];
 		subject = subject / base;
 	}
 	return char_malloc;
 }
 
-void	ft_putnbr_string(int subject_num, const char *base_char)
+void	ft_put_adr(long long subject_num, const char *base_char)
 {
 	int malloc_size;
-	int subjectnum_copy;
+	long long subjectnum_copy;
 	char *char_malloc;
 	const char *base_char_const;
 	int base_num;
@@ -66,22 +67,9 @@ void	ft_putnbr_string(int subject_num, const char *base_char)
 	base_num = counter_digit(base_char);
 	subjectnum_copy = subject_num;
 	malloc_size = num_base(subject_num, base_num);
-	char_malloc = inputnbr(subject_num, base_num, malloc_size);
+	char_malloc = inputnbr(subject_num, base_num, malloc_size, base_char);
 	if(char_malloc == NULL)
 		return ;
 	ft_putchar_string(char_malloc);
 	free(char_malloc);
 }
-
-/*
-int main()
-{
-	char *base_num_char = "12";
-	int subject_num = 5;
-	int base_num;
-	char *char_subject_num;
-
-	base_num = counter_digit(base_num_char);
-	basenum_char_malloc(subject_num, base_num);
-}
-*/
